@@ -7,6 +7,6 @@ You need to make a module script and put it anywhere but preferably in Replicate
 <details>
 <summary>Current Bugs?</summary>
 <br>
-  -No more than one tree
+1.No more than one tree
 </details>
 
