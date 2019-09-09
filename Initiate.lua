@@ -1,4 +1,4 @@
-local Class = require(game.ReplicatedStorage.Source.etc.Class)
+local Class = require(--[[ModuleLocation]])
 
 local Folder = Instance.new("Folder")
 Folder.Name = "Tree"
