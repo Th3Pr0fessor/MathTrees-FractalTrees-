@@ -18,26 +18,25 @@ middleclass.Plate = function(CF, Color)
 	P2.Material = Enum.Material.Neon
 	P2.Parent = game.Workspace
 end
-middleclass.Leaf = function(CF, Color)
-	local s = 1
-	local P2 = Instance.new("Part")
-	P2.Anchored = true
-	P2.Size = Vector3.new(s,s,s)
-	P2.CFrame = CF
-	P2.BrickColor = Color
-	P2.Material = Enum.Material.Grass
-	P2.Parent = game.Workspace
-end
 local Hreturner = function()
 	local X = math.random(1, 100)/100
 	return .67
 end
-local degreturner = function()
-	local Cap = 45
+local degreturner = function(Cap)
 	local X = math.rad(math.random(-Cap,Cap))
 	return X
 end
-local Size = .1
+middleclass.Leaf = function(CF, Color, S)
+	local P2 = Instance.new("Part")
+	P2.Anchored = true
+	P2.Size = Vector3.new(S,S,S)
+	P2.CFrame = CF * rotate(degreturner(360),degreturner(360),degreturner(360))
+	P2.BrickColor = Color
+	P2.Material = Enum.Material.Grass
+	P2.Parent = game.Workspace
+end
+
+local Size = 1
 function middleclass:branch(height, p, deg, deg2)
 	if height < 1 then
 		local store2 = self.CF * CFrame.new(0,(p.Size.Y/2), 0)
@@ -45,10 +44,10 @@ function middleclass:branch(height, p, deg, deg2)
 		return
 	end
 	self.Size = Vector3.new(Size,height, Size)
-	Size = Size * .9
+	Size = Size * 1
 	self.Len = self.Size.y
 	self.CF = p.CFrame
-	local Part = Instance.new("Part")
+	local Part = game.ReplicatedStorage.Cylinder:Clone()--Instance.new("Part")
 	Part.Parent = p.Parent
 	Part.Anchored = true
 	Part.Size = self.Size
@@ -58,18 +57,16 @@ function middleclass:branch(height, p, deg, deg2)
 		local store = self.CF * CFrame.new(0,(p.Size.Y/2+ Part.Size.Y/2),0)
 		Part.CFrame = store
 		num = num + 1
-		for i = 1, 4 do
-			spawn(function()
-				if i == 1 then
-					middleclass:branch(height * Hreturner(), Part, degreturner(), 0)
-				elseif i == 2 then
-					middleclass:branch(height * Hreturner(), Part, -degreturner(), 0)
-				elseif i == 3 then
-					middleclass:branch(height * Hreturner(), Part,degreturner(), -degreturner())
-				elseif i == 4 then
-					middleclass:branch(height * Hreturner(), Part, -degreturner(), degreturner())
-				end
-			end)
+		for d = 1,1 do
+			for i =1, 2 do
+				spawn(function()
+					if i == 1 then
+						middleclass:branch(height * Hreturner(), Part,degreturner(90), -degreturner(90))
+					elseif i == 2 then
+						middleclass:branch(height * Hreturner(), Part, -degreturner(90), degreturner(90))
+					end
+				end)
+			end
 		end
 	else
 		num = num + 1
@@ -80,30 +77,33 @@ function middleclass:branch(height, p, deg, deg2)
 		--middleclass.Plate(store4, BrickColor.Blue())
 		local store = self.CF * CFrame.new(0,(p.Size.Y/2+ Part.Size.Y/2),0)
 		local CF = store3
-		Part.CFrame = CF * rotate(deg2,0,deg)
+		local S, E = pcall(function()
+			Part.CFrame = CF * rotate(deg2,0,deg)
+		end)
+		if S == false then
+			Part.CFrame = CF * rotate(-degreturner(0),0,degreturner(0))
+		end
 		Part.CFrame = Part.CFrame:ToWorldSpace(CFrame.new(0,Part.Size.Y/2,0))
 		--print(num)
 		if height > 2 then
-			for i = 1, 4 do
-				spawn(function()
-					if i == 1 then
-						middleclass:branch(height * Hreturner(), Part, degreturner(), 0)
-					elseif i == 2 then
-						middleclass:branch(height * Hreturner(), Part, -degreturner(), 0)
-					elseif i == 3 then
-						middleclass:branch(height * Hreturner(), Part, degreturner(), -degreturner())
-					elseif i == 4 then
-						middleclass:branch(height * Hreturner(), Part, -degreturner(), degreturner())
-					end
-				end)
+			for d = 1,1 do
+				for i =1, 2 do
+					spawn(function()
+						if i == 1 then
+							middleclass:branch(height * Hreturner(), Part,degreturner(90), -degreturner(90))
+						elseif i == 2 then
+							middleclass:branch(height * Hreturner(), Part, -degreturner(90), degreturner(90))
+						end
+					end)
+				end
 			end
 		else
-			middleclass.Leaf(store2, BrickColor.Green())
+			middleclass.Leaf(store2, BrickColor.Green(),3)
 		end
 	end
 end
 
-function middleclass:Draw(h, starting, ending)
+function middleclass:Draw(h, starting)
 	middleclass:branch(h, starting)
 end
 
