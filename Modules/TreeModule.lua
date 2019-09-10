@@ -210,8 +210,4 @@ function middleclass:branch(height, p, deg, deg2)
 	end
 end
 
-function middleclass:Draw(h, starting)
-	middleclass:branch(h, starting)
-end
-
 return middleclass
