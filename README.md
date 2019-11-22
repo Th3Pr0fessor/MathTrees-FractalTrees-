@@ -10,3 +10,7 @@ You need to make a module script and put it anywhere but preferably in Replicate
 None I can think of :D
 </details>
 
+
+It in action:
+https://streamable.com/nefr3
+
